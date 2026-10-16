@@ -9,3 +9,5 @@
 - [x] Legal: privacy OAuth/API section, terms third-party/UGC/indemnity, /data-deletion page, footer links
 - [x] YouTube Kaart (vault koppeling, profielkaart, ontkoppelen)
 - [ ] db/95_youtube_vault.sql toepassen op Neon (wacht op NEON_API_KEY / Vercel deploy) + Google Cloud: redirect URI, YouTube Data API v3, youtube.readonly scope
+- [x] Mails: transactional tags + X-Mailin-Tag, one light design for all mails (incl. fallback frame), sync script
+- [ ] Brevo-templates uploaden: `bun scripts/sync-brevo-templates.ts` (wacht op BREVO_API_KEY)
