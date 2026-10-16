@@ -30,6 +30,7 @@ function TermsPage() {
   const chips: LegalChip[] = [
     { id: "scope", label: t("terms.chip.scope") },
     { id: "handles", label: t("terms.chip.handles") },
+    { id: "third-party", label: t("terms.chip.thirdParty") },
     { id: "payments", label: t("terms.chip.payments") },
     { id: "fair-use", label: t("terms.chip.fairUse") },
     { id: "print-warning", label: t("terms.chip.printWarning") },
@@ -59,6 +60,7 @@ function TermsPage() {
         <LegalActionBar
           links={[
             { to: "/privacy", label: t("terms.footer.privacy") },
+            { to: "/data-deletion", label: t("legal.footer.dataDeletion") },
             { to: "/sovereignty", label: t("terms.footer.sovereignty") },
             { to: "/contact", label: t("terms.footer.contact") },
           ]}
@@ -127,8 +129,23 @@ function TermsPage() {
           ),
         },
         {
+          id: "third-party",
+          heading: numbered("05", t("terms.section.thirdParty.heading")),
+          wrapperClassName: sectionWrapper,
+          body: (
+            <ul className={listClass}>
+              <li>{t("terms.section.thirdParty.li1")}</li>
+              <li>
+                <span className={strong}>{t("terms.section.thirdParty.li2.strong")}</span>{" "}
+                {t("terms.section.thirdParty.li2.text")}
+              </li>
+              <li>{t("terms.section.thirdParty.li3")}</li>
+            </ul>
+          ),
+        },
+        {
           id: "payments",
-          heading: numbered("05", t("terms.section.payments.heading")),
+          heading: numbered("06", t("terms.section.payments.heading")),
           wrapperClassName: sectionWrapper,
           body: (
             <ul className={listClass}>
@@ -149,7 +166,7 @@ function TermsPage() {
         },
         {
           id: "fair-use",
-          heading: numbered("06", t("terms.section.fairUse.heading")),
+          heading: numbered("07", t("terms.section.fairUse.heading")),
           wrapperClassName: sectionWrapper,
           body: (
             <>
@@ -184,6 +201,19 @@ function TermsPage() {
                   {t("terms.section.fairUse.li6.a")} {mailLink}
                   {t("terms.section.fairUse.li6.b")}
                 </li>
+                <li>
+                  <span className={strong}>{t("terms.section.fairUse.harassment.strong")}</span>{" "}
+                  {t("terms.section.fairUse.harassment.text")}
+                </li>
+                <li>
+                  <span className={strong}>{t("terms.section.fairUse.ugc.strong")}</span>{" "}
+                  {t("terms.section.fairUse.ugc.text")}
+                </li>
+                <li>
+                  <span className={strong}>{t("terms.section.fairUse.takedown.strong")}</span>{" "}
+                  {t("terms.section.fairUse.takedown.a")} {mailLink}
+                  {t("terms.section.fairUse.takedown.b")}
+                </li>
               </ul>
             </>
           ),
@@ -194,7 +224,7 @@ function TermsPage() {
             <h2 className="flex items-start gap-2 font-serif text-lg font-semibold text-amber-700 dark:text-amber-400">
               <AlertTriangle className="mt-1 size-4 shrink-0" aria-hidden="true" />
               <span>
-                <span className="mr-2 font-mono text-xs text-muted-foreground">07.</span>
+                <span className="mr-2 font-mono text-xs text-muted-foreground">08.</span>
                 {t("terms.section.printWarning.heading")}
               </span>
             </h2>
@@ -214,12 +244,16 @@ function TermsPage() {
                 <span className={strong}>{t("terms.section.printWarning.li3.strong")}</span>{" "}
                 {t("terms.section.printWarning.li3.text")}
               </li>
+              <li>
+                <span className={strong}>{t("terms.section.printWarning.indemnity.strong")}</span>{" "}
+                {t("terms.section.printWarning.indemnity.text")}
+              </li>
             </ul>
           ),
         },
         {
           id: "sla",
-          heading: numbered("08", t("terms.section.sla.heading")),
+          heading: numbered("09", t("terms.section.sla.heading")),
           wrapperClassName: sectionWrapper,
           body: (
             <ul className={listClass}>
@@ -236,7 +270,7 @@ function TermsPage() {
         },
         {
           id: "licensing",
-          heading: numbered("09", t("terms.section.licensing.heading")),
+          heading: numbered("10", t("terms.section.licensing.heading")),
           wrapperClassName: sectionWrapper,
           body: (
             <ul className={listClass}>
@@ -262,23 +296,23 @@ function TermsPage() {
         },
         {
           id: "creator",
-          heading: numbered("10", t("terms.section.creator.heading")),
+          heading: numbered("11", t("terms.section.creator.heading")),
           wrapperClassName: sectionWrapper,
           body: <p className={bodyText}>{t("terms.section.creator.body")}</p>,
         },
         {
           id: "jurisdiction",
-          heading: numbered("11", t("terms.section.jurisdiction.heading")),
+          heading: numbered("12", t("terms.section.jurisdiction.heading")),
           wrapperClassName: sectionWrapper,
           body: <p className={bodyText}>{t("terms.section.jurisdiction.body")}</p>,
         },
         {
           id: "contact",
-          heading: numbered("12", t("terms.section.contact.heading")),
+          heading: numbered("13", t("terms.section.contact.heading")),
           wrapperClassName: "scroll-mt-24",
           body: (
             <p className={bodyText}>
-              {t("terms.section.contact.body")} {mailLink}.
+              {t("terms.section.contact.body")} {mailLink}. {t("terms.section.contact.legalRefs")}
             </p>
           ),
         },

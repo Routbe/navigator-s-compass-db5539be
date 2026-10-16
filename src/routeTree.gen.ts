@@ -19,6 +19,7 @@ import { Route as BatchRouteImport } from './routes/batch'
 import { Route as CardRouteImport } from './routes/card'
 import { Route as ClaimRouteImport } from './routes/claim'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DataDeletionRouteImport } from './routes/data-deletion'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as EmailTemplatesRouteImport } from './routes/email-templates'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -208,6 +209,11 @@ const ClaimRoute = ClaimRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataDeletionRoute = DataDeletionRouteImport.update({
+  id: '/data-deletion',
+  path: '/data-deletion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevelopersRoute = DevelopersRouteImport.update({
@@ -979,6 +985,7 @@ export interface FileRoutesByFullPath {
   '/card': typeof CardRoute
   '/claim': typeof ClaimRoute
   '/contact': typeof ContactRoute
+  '/data-deletion': typeof DataDeletionRoute
   '/developers': typeof DevelopersRoute
   '/email-templates': typeof EmailTemplatesRoute
   '/explore': typeof ExploreRoute
@@ -1130,6 +1137,7 @@ export interface FileRoutesByTo {
   '/card': typeof CardRoute
   '/claim': typeof ClaimRoute
   '/contact': typeof ContactRoute
+  '/data-deletion': typeof DataDeletionRoute
   '/developers': typeof DevelopersRoute
   '/email-templates': typeof EmailTemplatesRoute
   '/explore': typeof ExploreRoute
@@ -1280,6 +1288,7 @@ export interface FileRoutesById {
   '/card': typeof CardRoute
   '/claim': typeof ClaimRoute
   '/contact': typeof ContactRoute
+  '/data-deletion': typeof DataDeletionRoute
   '/developers': typeof DevelopersRoute
   '/email-templates': typeof EmailTemplatesRoute
   '/explore': typeof ExploreRoute
@@ -1434,6 +1443,7 @@ export interface FileRouteTypes {
     | '/card'
     | '/claim'
     | '/contact'
+    | '/data-deletion'
     | '/developers'
     | '/email-templates'
     | '/explore'
@@ -1585,6 +1595,7 @@ export interface FileRouteTypes {
     | '/card'
     | '/claim'
     | '/contact'
+    | '/data-deletion'
     | '/developers'
     | '/email-templates'
     | '/explore'
@@ -1734,6 +1745,7 @@ export interface FileRouteTypes {
     | '/card'
     | '/claim'
     | '/contact'
+    | '/data-deletion'
     | '/developers'
     | '/email-templates'
     | '/explore'
@@ -1888,6 +1900,7 @@ export interface RootRouteChildren {
   CardRoute: typeof CardRoute
   ClaimRoute: typeof ClaimRoute
   ContactRoute: typeof ContactRoute
+  DataDeletionRoute: typeof DataDeletionRoute
   DevelopersRoute: typeof DevelopersRoute
   EmailTemplatesRoute: typeof EmailTemplatesRoute
   ExploreRoute: typeof ExploreRoute
@@ -2045,6 +2058,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data-deletion': {
+      id: '/data-deletion'
+      path: '/data-deletion'
+      fullPath: '/data-deletion'
+      preLoaderRoute: typeof DataDeletionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/developers': {
@@ -3274,6 +3294,7 @@ const rootRouteChildren: RootRouteChildren = {
   CardRoute: CardRoute,
   ClaimRoute: ClaimRoute,
   ContactRoute: ContactRoute,
+  DataDeletionRoute: DataDeletionRoute,
   DevelopersRoute: DevelopersRoute,
   EmailTemplatesRoute: EmailTemplatesRoute,
   ExploreRoute: ExploreRoute,
