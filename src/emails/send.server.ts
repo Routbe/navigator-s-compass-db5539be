@@ -30,7 +30,22 @@ export const TRACKING_OFF_HEADERS = {
   "X-Mailin-Track": "0",
   "X-Mailin-Track-Opens": "0",
   "X-Mailin-Track-Clicks": "0",
+  // Transactional, never a list/campaign: keeps login mails out of "Promotions".
+  "X-Mailin-Tag": "transactional",
 } as const;
+
+/** Categories that carry the extra "security" tag. */
+const SECURITY_CATEGORIES = new Set([
+  "login", "recovery", "email_change", "reauthentication", "confirmation", "security", "merge", "deletion",
+]);
+
+/** Every mail is tagged transactional (+ security for auth mails); caller tags are kept. */
+export function transactionalTags(category?: string, extra?: string[]): string[] {
+  const tags = ["transactional"];
+  if (category && SECURITY_CATEGORIES.has(category)) tags.push("security");
+  for (const t of extra ?? []) if (t && !tags.includes(t)) tags.push(t);
+  return tags;
+}
 
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 
@@ -230,7 +245,8 @@ export function notifyAdminOfFallback(params: AdminAlertParams): void {
     templateId,
     params,
     replyTo: defaultReplyTo(),
-    tags: ["mailer-fallback-alert"],
+    headers: TRACKING_OFF_HEADERS,
+    tags: transactionalTags("system", ["mailer-fallback-alert"]),
   };
   void postToBrevo(key, body, `admin alert template #${templateId}`).then((res) => {
     if (!res.sent) {
@@ -246,7 +262,8 @@ export function notifyAdminOfFallback(params: AdminAlertParams): void {
             `<p>Used fallback: <strong>${params.USED_FALLBACK_ID}</strong></p>` +
             `<p>Recipient: ${params.RECIPIENT_EMAIL}</p>` +
             `<p>Reason: ${params.REASON}</p>`,
-          tags: ["mailer-fallback-alert"],
+          headers: TRACKING_OFF_HEADERS,
+    tags: transactionalTags("system", ["mailer-fallback-alert"]),
         },
         "admin alert inline fallback",
       );
@@ -283,7 +300,7 @@ export async function sendMail(opts: MailOptions): Promise<{ sent: boolean; erro
     ...(opts.params ? { params: opts.params } : {}),
     replyTo: opts.replyTo ?? defaultReplyTo(),
     headers: TRACKING_OFF_HEADERS,
-    ...(opts.tags ? { tags: opts.tags } : {}),
+    tags: transactionalTags(opts.category, opts.tags),
     ...(opts.attachments?.length
       ? {
           attachment: opts.attachments.map((file) => ({
@@ -337,7 +354,11 @@ export async function sendMail(opts: MailOptions): Promise<{ sent: boolean; erro
     let first = Boolean(opts.htmlFirst && opts.html);
     if (opts.html && !/<html[\s>]/i.test(opts.html)) {
       const { brandHtml } = await import("./react/branded.server");
-      const branded = await brandHtml(opts.html, { language: opts.language, preview: opts.subject });
+      const branded = await brandHtml(opts.html, {
+        language: opts.language,
+        preview: opts.subject,
+        ...(opts.category ? { category: opts.category } : {}),
+      });
       if (branded) {
         html = branded;
         first = true;
