@@ -313,6 +313,7 @@ export function ProfileView({
             name={profile.display_name ?? ""}
             bio={shownBio || profile.tagline}
             avatarUrl={profile.avatar_url}
+            qrStyle={prefs.qrSettings ?? null}
             className="backdrop-blur"
             style={{ borderColor: t.border, color: t.text, background: t.card }}
           />

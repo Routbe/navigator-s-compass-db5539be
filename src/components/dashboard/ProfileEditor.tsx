@@ -811,6 +811,7 @@ export function ProfileEditor({ variant = "verified" }: { variant?: ProfileVaria
             name={displayName}
             bio={tagline}
             avatarUrl={avatarUrl}
+            qrStyle={prefs.qrSettings ?? null}
             showNfc
           />
           <a
