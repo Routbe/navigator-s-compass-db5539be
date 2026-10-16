@@ -51,6 +51,7 @@ export const COMPONENT_LIBRARY: LibraryGroup[] = [
       { kind: "media_gallery", tag: "foto", label: "Afbeelding / Galerij", note: "Foto's in een raster", isNew: true },
       { kind: "spotify", tag: "audio", label: "Spotify / Audio embed", note: "Track, album of podcast", isNew: true },
       { kind: "soundcloud", tag: "audio", label: "SoundCloud embed", note: "Track of profiel" },
+      { kind: "widget:youtube", tag: "video", label: "YouTube Kaart", note: "Kanaal, abonnees en nieuwste video's", isNew: true },
     ],
   },
   {
@@ -80,7 +81,7 @@ export const COMPONENT_LIBRARY: LibraryGroup[] = [
   },
 ];
 
-export type WidgetId = "questions" | "guestbook" | "badges" | "reach";
+export type WidgetId = "questions" | "guestbook" | "badges" | "reach" | "youtube";
 
 /** Live kaarten die een koppeling uit de Integratiekluis hergebruiken. */
 export const LIVE_COMPONENTS: { provider: string; note: string }[] = [

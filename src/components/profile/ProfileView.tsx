@@ -1,3 +1,4 @@
+import { ProfileYouTubeCard } from "@/components/profile/YouTubeCard";
 import { isProfileSectionKind, usesSectionFallback } from "@/lib/profile-section-blocks";
 import { NowPlaying, useNowPlaying } from "@/components/profile/NowPlaying";
 import { SnapchatProfile } from "@/components/profile/SnapchatProfile";
@@ -418,6 +419,7 @@ export function ProfileView({
         {profile.username && <SnapchatProfile handle={profile.username} theme={t} />}
         {profile.username && <NowPlaying handle={profile.username} theme={t} />}
         {profile.username && <ProfileIntegrations handle={profile.username} theme={t} />}
+        {profile.username && <ProfileYouTubeCard handle={profile.username} theme={t} />}
         {profile.username && <TipJarButton handle={profile.username} theme={t} />}
         <ProfilePassport handle={profile.username} theme={t} />
         {profile.username && usesSectionFallback(profile.blocks, "widget:guestbook") && <ProfileGuestbook handle={profile.username} theme={t} />}
