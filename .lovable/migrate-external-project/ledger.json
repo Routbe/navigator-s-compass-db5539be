@@ -1,0 +1,16 @@
+{
+  "source": "github",
+  "repo": "https://github.com/Routbe/navigator-s-compass-ce2dd89c.git",
+  "capabilities": [
+    { "capability": "application code (TanStack Start, 1069 TS/TSX files)", "source": "repo src/", "outcome": "copied into project", "status": "migrated", "next_action": "verify build" },
+    { "capability": "database schema (94 SQL migrations, Neon Postgres)", "source": "db/*.sql", "outcome": "preserved as external Neon database; run scripts/migrate.ts with MIGRATION_URL", "status": "pending", "next_action": "user provides DATABASE_URL/MIGRATION_URL or requests move to Lovable Cloud" },
+    { "capability": "records", "source": "none exported", "outcome": "no record export in repo", "status": "pending", "next_action": "request CSV/JSON exports from Neon dashboard" },
+    { "capability": "auth (better-auth + passkeys + OAuth providers)", "source": "src/lib/auth", "outcome": "preserved as-is; requires BETTER_AUTH_SECRET/BETTER_AUTH_URL", "status": "pending", "next_action": "user adds secrets via secure form" },
+    { "capability": "payments (Stripe + Connect)", "source": "src, db/25", "outcome": "preserved", "status": "pending", "next_action": "user adds Stripe keys" },
+    { "capability": "email (Brevo + react-email templates)", "source": "src/emails, src/lib/brevo", "outcome": "preserved", "status": "pending", "next_action": "user adds Brevo key" },
+    { "capability": "public API routes + cron (/api/public/*)", "source": "src/routes/api*", "outcome": "copied", "status": "migrated", "next_action": "verify after secrets" },
+    { "capability": "PWA offline shell (vite-plugin-pwa)", "source": "vite.config.ts", "outcome": "copied", "status": "migrated", "next_action": "verify build" },
+    { "capability": "secrets/env vars", "source": "ENVIRONMENT.md", "outcome": "not present in repo", "status": "pending", "next_action": "collect via Lovable secret form before live verification" },
+    { "capability": "cutover (rout.be domain, Vercel cron, OAuth callbacks)", "source": "vercel.json, ENVIRONMENT.md", "outcome": "not started", "status": "pending", "next_action": "decide after preview" }
+  ]
+}
