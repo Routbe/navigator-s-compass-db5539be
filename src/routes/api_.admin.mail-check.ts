@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
  * Admin mail diagnostic. GET returns only booleans (no secrets, no addresses).
  * POST sends one test mail to the configured owner addresses only, rate-limited.
  */
-export const Route = createFileRoute("/api_/admin-mail-check")({
+export const Route = createFileRoute("/api_/admin/mail-check")({
   server: {
     handlers: {
       GET: async () => {
