@@ -186,3 +186,6 @@ Register the webhook once with `TELEGRAM_BOT_TOKEN=... bun scripts/telegram-set-
 
 ## VITE_PUBLIC_SITE_URL
 Public site base URL (e.g. https://rout.be) used for stamp claim links created on the admin portal. Optional; defaults to https://rout.be in admin mode.
+
+## YouTube vault
+Reuses `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` and `PSP_ENCRYPTION_KEY`. Add redirect URI `https://rout.be/api/public/youtube/callback` in Google Cloud and enable YouTube Data API v3.
