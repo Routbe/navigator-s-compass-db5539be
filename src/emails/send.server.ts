@@ -158,7 +158,7 @@ async function postToBrevo(
       if (res.status !== 201 && !res.ok) {
         const detail = (await res.text().catch(() => "")).slice(0, 500);
         lastError = describeBrevoFailure(res.status, detail);
-        console.error(`[Mailer] ${label} failed [${res.status}]`, {
+        console.error(`[Brevo API Error] ${label} failed [${res.status}]`, {
           correlationId,
           try: `${try_}/${MAX_ATTEMPTS}`,
           detail,

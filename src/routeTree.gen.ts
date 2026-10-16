@@ -97,6 +97,7 @@ import { Route as AuthenticatedDashboardBlueskyRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardDomainsRouteImport } from './routes/_authenticated/dashboard.domains'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardRoutesRouteImport } from './routes/_authenticated/dashboard.routes'
+import { Route as ApiAdminMailCheckRouteImport } from './routes/api_.admin.mail-check'
 import { Route as ApiAuthSplatRouteImport } from './routes/api_.auth.$'
 import { Route as ApiBunqCheckStatusRouteImport } from './routes/api_.bunq.check-status'
 import { Route as ApiPresenceNowPlayingRouteImport } from './routes/api_.presence.now-playing'
@@ -623,6 +624,11 @@ const AuthenticatedDashboardRoutesRoute =
     path: '/routes',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const ApiAdminMailCheckRoute = ApiAdminMailCheckRouteImport.update({
+  id: '/api_/admin/mail-check',
+  path: '/api/admin/mail-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api_/auth/$',
   path: '/api/auth/$',
@@ -1080,6 +1086,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
+  '/api/admin/mail-check': typeof ApiAdminMailCheckRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/bunq/check-status': typeof ApiBunqCheckStatusRoute
   '/api/presence/now-playing': typeof ApiPresenceNowPlayingRoute
@@ -1232,6 +1239,7 @@ export interface FileRoutesByTo {
   '/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
+  '/api/admin/mail-check': typeof ApiAdminMailCheckRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/bunq/check-status': typeof ApiBunqCheckStatusRoute
   '/api/presence/now-playing': typeof ApiPresenceNowPlayingRoute
@@ -1389,6 +1397,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
+  '/api_/admin/mail-check': typeof ApiAdminMailCheckRoute
   '/api_/auth/$': typeof ApiAuthSplatRoute
   '/api_/bunq/check-status': typeof ApiBunqCheckStatusRoute
   '/api_/presence/now-playing': typeof ApiPresenceNowPlayingRoute
@@ -1547,6 +1556,7 @@ export interface FileRouteTypes {
     | '/dashboard/domains'
     | '/dashboard/profile'
     | '/dashboard/routes'
+    | '/api/admin/mail-check'
     | '/api/auth/$'
     | '/api/bunq/check-status'
     | '/api/presence/now-playing'
@@ -1699,6 +1709,7 @@ export interface FileRouteTypes {
     | '/dashboard/domains'
     | '/dashboard/profile'
     | '/dashboard/routes'
+    | '/api/admin/mail-check'
     | '/api/auth/$'
     | '/api/bunq/check-status'
     | '/api/presence/now-playing'
@@ -1855,6 +1866,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/domains'
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/routes'
+    | '/api_/admin/mail-check'
     | '/api_/auth/$'
     | '/api_/bunq/check-status'
     | '/api_/presence/now-playing'
@@ -1978,6 +1990,7 @@ export interface RootRouteChildren {
   SSlugRoute: typeof SSlugRoute
   StatsTokenRoute: typeof StatsTokenRoute
   UUsernameRoute: typeof UUsernameRouteWithChildren
+  ApiAdminMailCheckRoute: typeof ApiAdminMailCheckRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiBunqCheckStatusRoute: typeof ApiBunqCheckStatusRoute
   ApiPresenceNowPlayingRoute: typeof ApiPresenceNowPlayingRoute
@@ -2645,6 +2658,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/routes'
       preLoaderRoute: typeof AuthenticatedDashboardRoutesRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/api_/admin/mail-check': {
+      id: '/api_/admin/mail-check'
+      path: '/api/admin/mail-check'
+      fullPath: '/api/admin/mail-check'
+      preLoaderRoute: typeof ApiAdminMailCheckRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api_/auth/$': {
       id: '/api_/auth/$'
@@ -3396,6 +3416,7 @@ const rootRouteChildren: RootRouteChildren = {
   SSlugRoute: SSlugRoute,
   StatsTokenRoute: StatsTokenRoute,
   UUsernameRoute: UUsernameRouteWithChildren,
+  ApiAdminMailCheckRoute: ApiAdminMailCheckRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiBunqCheckStatusRoute: ApiBunqCheckStatusRoute,
   ApiPresenceNowPlayingRoute: ApiPresenceNowPlayingRoute,

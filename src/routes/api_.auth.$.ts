@@ -34,7 +34,7 @@ async function checkAltcha(request: Request): Promise<Response | null> {
   const requireHard = email ? await identityNeedsHardChallenge(throttleHashForEmail(email)) : false;
   const result = await verifyAltcha(request.headers.get("x-altcha"), { requireHard });
   if (result.ok) return null;
-  console.warn(`[auth] altcha rejected: ${result.reason}`);
+  console.error(`[ALTCHA Error] rejected: ${result.reason}`);
   if (result.reason === "store_unavailable") {
     return Response.json(
       { code: "altcha_store_unavailable", message: "De beveiligingscontrole is tijdelijk niet bereikbaar. Probeer het over een minuut opnieuw." },
@@ -125,11 +125,19 @@ export async function handleAuthRequest({ request }: { request: Request }) {
     if (appMode() === "admin" && request.method === "POST" && ALTCHA_PATHS.has(relativePath)) {
       let email: unknown;
       try { email = ((await request.clone().json()) as { email?: unknown }).email; } catch { email = undefined; }
-      const { canUseAdminEmail } = await import("@/lib/auth/owner-admin.server");
-      if (!(await canUseAdminEmail(email))) return Response.json(
-        { code: "admin_only", message: "Dit beheerportaal is uitsluitend toegankelijk voor geautoriseerde beheerders." },
-        { status: 403, headers: { "cache-control": "no-store" } },
-      );
+      const { adminEmailEligibility } = await import("@/lib/auth/owner-admin.server");
+      const eligibility = await adminEmailEligibility(email);
+      if (!eligibility.ok) {
+        console.warn(`[admin-auth] refused: ${eligibility.reason}`);
+        if (eligibility.reason === "db_unreachable") return Response.json(
+          { code: "admin_db_unreachable", message: "De database van het beheerportaal is niet bereikbaar. Controleer DATABASE_URL in deze omgeving." },
+          { status: 503, headers: { "cache-control": "no-store" } },
+        );
+        return Response.json(
+          { code: "admin_only", message: "Dit e-mailadres is niet herkend als beheerder (OWNER_EMAILS of beheerdersrol)." },
+          { status: 403, headers: { "cache-control": "no-store" } },
+        );
+      }
     }
 
     if (provider === "gitlab" && SOCIAL_BODY_PATHS.has(relativePath)) {
