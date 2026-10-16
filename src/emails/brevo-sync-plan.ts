@@ -6,7 +6,6 @@ import {
   adminContactTemplate,
   brevoTemplate,
   subdomainClaimTemplate,
-  systemNoticeTemplate,
   type BrevoKind,
   type BuiltMail,
 } from "./design/mails";
@@ -49,6 +48,5 @@ export function buildSyncPlan(): SyncItem[] {
   add(GLOBAL_FALLBACK_TEMPLATE_ID, "ROUT · global fallback", brevoTemplate("auth", "en"));
   add(1, "ROUT · admin contact · nl", adminContactTemplate());
   add(2, "ROUT · subdomain claim · nl", subdomainClaimTemplate());
-  add(EMAIL_CATEGORY_FALLBACK.system, "ROUT · system notice · en", systemNoticeTemplate("en"));
   return [...out.values()].sort((a, b) => a.id - b.id);
 }
