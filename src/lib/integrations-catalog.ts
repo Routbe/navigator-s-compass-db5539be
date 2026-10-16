@@ -131,3 +131,43 @@ export function filterIntegrations(filter: IntegrationFilter): Integration[] {
 export function isLive(item: Integration): boolean {
   return item.mode !== "soon";
 }
+
+/** Data a live component may show, per platform (only what the public fetchers return). */
+export type LiveStatKey = "followers" | "repos" | "bio" | "activity" | "blitz" | "rapid" | "online" | "challenge" | "videos" | "posts";
+
+export const LIVE_STAT_LABELS: Record<LiveStatKey, string> = {
+  followers: "Aantal volgers",
+  repos: "Aantal repo's",
+  bio: "Bio",
+  activity: "Laatste activiteit",
+  blitz: "Blitz-rating",
+  rapid: "Rapid-rating",
+  online: "Online-status",
+  challenge: "Uitdaag-knop",
+  videos: "Nieuwste video's",
+  posts: "Laatste posts",
+};
+
+const LIVE_STATS: Record<string, LiveStatKey[]> = {
+  github: ["repos", "followers", "activity", "bio"],
+  gitlab: ["activity"],
+  mastodon: ["followers", "bio", "activity"],
+  bluesky: ["followers", "bio", "activity"],
+  wsocial: ["followers", "bio", "activity"],
+  wakatime: ["activity"],
+  lichess: ["blitz", "rapid", "online", "challenge"],
+  chesscom: ["blitz", "rapid", "online", "challenge"],
+  youtube: ["videos", "activity"],
+  rss: ["posts"],
+};
+
+export function liveStatOptions(provider: string): LiveStatKey[] {
+  return LIVE_STATS[provider] ?? [];
+}
+
+/** Selected stats; undefined (never chosen) = all options. Unknown keys are dropped. */
+export function shownLiveStats(provider: string, selected: unknown): Set<LiveStatKey> {
+  const opts = liveStatOptions(provider);
+  if (!Array.isArray(selected)) return new Set(opts);
+  return new Set(opts.filter((k) => selected.includes(k)));
+}

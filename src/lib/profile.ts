@@ -29,6 +29,8 @@ export interface ProfileBlock {
   visibilityRule?: BlockVisibilityRule;
   /** Pro/Social switch: Global blocks always show. Default global. */
   contextTag?: BlockContextTag;
+  /** Live component (`kind: "live"`, value = provider): which stats to show. */
+  stats?: string[];
 }
 
 export type BlockVisibilityRule = "always_visible" | "hide_when_focus_mode" | "show_only_when_live";
