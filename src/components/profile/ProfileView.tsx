@@ -143,6 +143,7 @@ export function ProfileView({
       b.kind === "booking_request" ||
       b.kind === "spacer" || isProfileSectionKind(b.kind),
   );
+  const liveProviders = profile.blocks.filter((b) => b.kind === "live").map((b) => b.value);
   /** Accent-animatie op de gekozen hoofdlink (glow, pulse of shimmer). */
   const ctaClass = (blockId: string) => {
     if (prefs.ctaBlockId !== blockId || prefs.ctaEffect === "none") return "";
@@ -313,6 +314,7 @@ export function ProfileView({
             name={profile.display_name ?? ""}
             bio={shownBio || profile.tagline}
             avatarUrl={profile.avatar_url}
+            qrStyle={prefs.qrSettings ?? null}
             className="backdrop-blur"
             style={{ borderColor: t.border, color: t.text, background: t.card }}
           />
@@ -418,8 +420,8 @@ export function ProfileView({
         </h1>
         {profile.username && <SnapchatProfile handle={profile.username} theme={t} />}
         {profile.username && <NowPlaying handle={profile.username} theme={t} />}
-        {profile.username && <ProfileIntegrations handle={profile.username} theme={t} />}
-        {profile.username && <ProfileYouTubeCard handle={profile.username} theme={t} />}
+        {profile.username && <ProfileIntegrations handle={profile.username} theme={t} exclude={liveProviders} />}
+        {profile.username && usesSectionFallback(profile.blocks, "widget:youtube") && <ProfileYouTubeCard handle={profile.username} theme={t} />}
         {profile.username && <TipJarButton handle={profile.username} theme={t} />}
         <ProfilePassport handle={profile.username} theme={t} />
         {profile.username && usesSectionFallback(profile.blocks, "widget:guestbook") && <ProfileGuestbook handle={profile.username} theme={t} />}
@@ -581,6 +583,10 @@ export function ProfileView({
               profile.username ? <div key={b.id} className="w-full lg:col-span-full"><ProfileGuestbook handle={profile.username} theme={t} /></div> : null
             ) : b.kind === "widget:badges" ? (
               prefs.badgeShowcaseVisible ? <div key={b.id} className="w-full lg:col-span-full"><BadgeShowcase userId={profile.id} theme={t} /></div> : null
+            ) : b.kind === "widget:youtube" ? (
+              profile.username ? <div key={b.id} className="w-full lg:col-span-full"><ProfileYouTubeCard handle={profile.username} theme={t} /></div> : null
+            ) : b.kind === "live" ? (
+              profile.username ? <div key={b.id} className="w-full lg:col-span-full"><ProfileIntegrations handle={profile.username} theme={t} provider={b.value} stats={b.stats} /></div> : null
             ) : b.kind === "widget:reach" ? (
               profile.show_total_reach && (profile.total_reach_count ?? 0) > 0 ? <div key={b.id} className="flex w-full items-center justify-center gap-1.5 text-sm lg:col-span-full"><Users className="h-4 w-4" aria-hidden />{formatReach(profile.total_reach_count ?? 0)} bereik</div> : null
             ) : b.kind === "spacer" ? (

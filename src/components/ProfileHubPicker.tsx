@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { BadgeCheck, Loader2 } from "lucide-react";
+import { BadgeCheck, Check, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Link } from "@/lib/router-compat";
 import { Input } from "@/components/ui/input";
 import { useServerFn } from "@tanstack/react-start";
 import { getStudioProfile } from "@/lib/studio-profile.functions";
+import { saveQrSettingsFn } from "@/lib/qr-settings.functions";
+import { currentProfileQrStyle } from "@/lib/qr-design-bridge";
 import { useAuth } from "@/hooks/useAuth";
 import { HANDLE_MIN_LENGTH, handleIssue, normalizeHandle, profilePath } from "@/lib/profile";
 
@@ -13,8 +16,8 @@ interface Props {
 }
 
 /**
- * The QR generator no longer edits profile content: it only picks the
- * @handle the QR points to. All content is managed in /studio.
+ * The QR generator only picks the @handle the QR points to; "Opslaan" stores
+ * the on-screen design as the profile QR style (shown in the Share menu).
  */
 export function ProfileHubPicker({ values, onChange }: Props) {
   const { user } = useAuth();
@@ -22,7 +25,24 @@ export function ProfileHubPicker({ values, onChange }: Props) {
   const [handle, setHandle] = useState<string | null>(null);
   const [verified, setVerified] = useState(false);
   const [manual, setManual] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const loadProfile = useServerFn(getStudioProfile);
+  const saveQr = useServerFn(saveQrSettingsFn);
+
+  async function saveDesign() {
+    setSaving(true);
+    try {
+      await saveQr({ data: currentProfileQrStyle() });
+      setSaved(true);
+      toast.success("Profiel-QR opgeslagen");
+      setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      toast.error(`Opslaan mislukt: ${err instanceof Error ? err.message : "onbekende fout"}`);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   const origin = typeof window === "undefined" ? "https://rout.be" : window.location.origin;
   const host = origin.replace(/^https?:\/\//, "");
@@ -119,11 +139,17 @@ export function ProfileHubPicker({ values, onChange }: Props) {
         </p>
       </div>
 
-      <Link
-        to="/studio"
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-medium text-background transition-opacity hover:opacity-90"
+      <button
+        type="button"
+        onClick={() => void saveDesign()}
+        disabled={saving || !user}
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-60"
       >
-        ⚙ Beheer profielhub →
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : null}
+        {!user ? "Log in om op te slaan" : saved ? "Opgeslagen" : "Opslaan"}
+      </button>
+      <Link to="/studio" className="block text-center text-[12px] text-muted-foreground underline-offset-4 hover:underline">
+        Beheer profielhub →
       </Link>
 
       {values.hub_url && (

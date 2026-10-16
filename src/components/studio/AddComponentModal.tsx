@@ -185,6 +185,8 @@ export function AddComponentModal({ open, onClose, onAdd, handle, onWidget }: Pr
         await qc.invalidateQueries({ queryKey: ["my-presence"] });
       } else {
         const row = rowFor(provider);
+        // Username first: the component exists right away; official linking is offered in its row.
+        if (provider !== "spotify") onAdd("live", provider);
         if (!row) return setVault(provider);
         const r = await save({ data: { provider, handle: row.handle, audience: row.audience, visible: true, useSso: row.verified } });
         if (!r.ok) throw new Error();

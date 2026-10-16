@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BadgeCheck, QrCode } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { BrandIcon } from "@/components/integrations/BrandIcon";
-import { integrationById } from "@/lib/integrations-catalog";
+import { integrationById, shownLiveStats, type LiveStatKey } from "@/lib/integrations-catalog";
 import { paymentUri } from "@/lib/integrations-rules";
 import { proxied } from "@/lib/image-proxy-rules";
 
@@ -26,7 +26,15 @@ type Item = {
 type Theme = { card: string; border: string; text: string; muted: string };
 
 /** Live connection cards on a public profile. External images go through the privacy proxy. */
-export function ProfileIntegrations({ handle, theme, mode = null }: { handle: string; theme: Theme; mode?: "pro" | "social" | null }) {
+export function ProfileIntegrations({ handle, theme, mode = null, provider, stats, exclude }: {
+  handle: string; theme: Theme; mode?: "pro" | "social" | null;
+  /** Live component: render only this provider. */
+  provider?: string;
+  /** Live component: chosen stats (undefined = all). */
+  stats?: string[];
+  /** Providers placed as their own component elsewhere. */
+  exclude?: string[];
+}) {
   const q = useQuery({
     queryKey: ["profile-integrations", handle, mode],
     queryFn: async (): Promise<Item[]> => {
@@ -35,15 +43,31 @@ export function ProfileIntegrations({ handle, theme, mode = null }: { handle: st
     },
     staleTime: 60_000,
   });
-  const items = q.data ?? [];
+  const items = (q.data ?? []).filter((it) => (provider ? it.provider === provider : !exclude?.includes(it.provider)));
   if (items.length === 0) return null;
   return (
-    <div className="mt-4 grid w-full max-w-sm gap-2">
+    <div className={provider ? "grid w-full gap-2" : "mt-4 grid w-full max-w-sm gap-2"}>
       {items.map((it) => (
-        <Card key={it.provider} item={it} theme={theme} />
+        <Card key={it.provider} item={filterItem(it, provider ? stats : undefined)} theme={theme} />
       ))}
     </div>
   );
+}
+
+const has = (set: Set<LiveStatKey>, k: LiveStatKey) => set.has(k);
+
+/** Strips data the owner chose not to show on this component. */
+export function filterItem(item: Item, selected: string[] | undefined): Item {
+  if (!item.status || selected === undefined) return item;
+  const show = shownLiveStats(item.provider, selected);
+  const st = { ...item.status };
+  if (!has(show, "bio")) delete st.bio;
+  if (!has(show, "activity")) delete st.subtitle;
+  if (st.stats) st.stats = st.stats.filter((x) => (/repo/i.test(x.label) ? has(show, "repos") : has(show, "followers")));
+  if (st.chess) st.chess = { blitz: has(show, "blitz") ? st.chess.blitz : null, rapid: has(show, "rapid") ? st.chess.rapid : null, online: has(show, "online") ? st.chess.online : null, challengeUrl: has(show, "challenge") ? st.chess.challengeUrl : undefined };
+  if (!has(show, "videos")) delete st.videos;
+  if (!has(show, "posts")) delete st.posts;
+  return { ...item, status: st };
 }
 
 function ChessCard({ item, theme }: { item: Item; theme: Theme }) {

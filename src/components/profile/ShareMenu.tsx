@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import { useServerFn } from "@tanstack/react-start";
 import { Copy, FileDown, ImageDown, Nfc, QrCode, Share2 } from "lucide-react";
@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { downloadCardPdf, downloadCardPng, type CardInput } from "@/lib/business-card";
 import { joinNfcWaitlist } from "@/lib/nfc-waitlist.functions";
 import { cn } from "@/lib/utils";
+import { DEFAULT_PROFILE_QR_STYLE, profileQrSvg, type ProfileQrStyle } from "@/lib/profile-qr";
 
 type Props = {
   url: string;
@@ -24,14 +25,20 @@ type Props = {
   avatarUrl?: string | null;
   /** Shows the NFC teaser (Studio only — needs a signed-in member). */
   showNfc?: boolean;
+  /** Saved profile QR style (display_prefs.qrSettings). */
+  qrStyle?: ProfileQrStyle | null;
   className?: string;
   style?: React.CSSProperties;
 };
 
 /** "Deel" menu: copy link, QR, business card (PNG/PDF) and the NFC waitlist teaser. */
-export function ShareMenu({ url, handle, name, bio, avatarUrl, showNfc, className, style }: Props) {
+export function ShareMenu({ url, handle, name, bio, avatarUrl, showNfc, qrStyle, className, style }: Props) {
   const qrRef = useRef<HTMLCanvasElement>(null);
   const [nfcOpen, setNfcOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
+  const qs = qrStyle ?? DEFAULT_PROFILE_QR_STYLE;
+  const svg = useMemo(() => profileQrSvg(url, qs, { size: 512 }), [url, qs]);
+  const svgSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 
   const qrDataUrl = () => qrRef.current?.toDataURL("image/png") ?? "";
   const card = (): CardInput => ({ name: name || `@${handle}`, handle, bio: bio ?? "", url, avatarUrl, qrDataUrl: qrDataUrl() });
@@ -46,6 +53,12 @@ export function ShareMenu({ url, handle, name, bio, avatarUrl, showNfc, classNam
   };
   const downloadQr = () => {
     const a = document.createElement("a");
+    a.href = svgSrc;
+    a.download = `${handle || "rout"}-qr.svg`;
+    a.click();
+  };
+  const downloadQrPng = () => {
+    const a = document.createElement("a");
     a.href = qrDataUrl();
     a.download = `${handle || "rout"}-qr.png`;
     a.click();
@@ -55,7 +68,7 @@ export function ShareMenu({ url, handle, name, bio, avatarUrl, showNfc, classNam
 
   return (
     <>
-      <QRCodeCanvas ref={qrRef} value={url} size={480} marginSize={2} className="hidden" aria-hidden />
+      <QRCodeCanvas ref={qrRef} value={url} size={480} marginSize={2} fgColor={qs.fgColor} bgColor={qs.bgColor} className="hidden" aria-hidden />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
@@ -67,10 +80,14 @@ export function ShareMenu({ url, handle, name, bio, avatarUrl, showNfc, classNam
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-60">
+          <DropdownMenuItem onSelect={() => setQrOpen(true)} className="justify-center p-3" aria-label="Toon QR-code op volledig scherm">
+            <img src={svgSrc} alt={`QR-code voor ${handle}`} className="h-28 w-28 rounded-lg" />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={() => void copy()}>
             <Copy className="mr-2 h-4 w-4" aria-hidden /> Kopieer link
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={downloadQr}>
+          <DropdownMenuItem onSelect={downloadQrPng}>
             <QrCode className="mr-2 h-4 w-4" aria-hidden /> Download QR-code
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={run(() => downloadCardPng(card()))}>
@@ -90,6 +107,20 @@ export function ShareMenu({ url, handle, name, bio, avatarUrl, showNfc, classNam
         </DropdownMenuContent>
       </DropdownMenu>
       {showNfc && <NfcDialog open={nfcOpen} onOpenChange={setNfcOpen} />}
+      <Dialog open={qrOpen} onOpenChange={setQrOpen}>
+        <DialogContent className="flex max-h-[100dvh] w-[100vw] max-w-[100vw] flex-col items-center justify-center gap-4 border-0 sm:max-w-[min(90vw,90vh)] sm:rounded-2xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>QR-code</DialogTitle>
+            <DialogDescription>Scan om het profiel van @{handle} te openen.</DialogDescription>
+          </DialogHeader>
+          <img src={svgSrc} alt={`QR-code voor ${handle}`} className="aspect-square w-full max-w-[min(90vw,80dvh)] rounded-xl" />
+          <p className="text-sm font-medium">@{handle}</p>
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" onClick={downloadQrPng}>PNG</Button>
+            <Button type="button" variant="outline" onClick={downloadQr}>SVG</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
