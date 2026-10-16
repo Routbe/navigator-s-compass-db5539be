@@ -32,7 +32,7 @@ function greetLiquid(c: CopyPack): string {
   return `{% if params.NAME or params.name %}${withName}{% else %}${without}{% endif %}`;
 }
 
-export const BREVO_KINDS = ["login", "form", "payConfirm", "payment", "payIssue", "renewal", "cancel", "refund"] as const;
+export const BREVO_KINDS = ["auth", "login", "form", "payConfirm", "payment", "payIssue", "renewal", "cancel", "refund"] as const;
 export type BrevoKind = (typeof BREVO_KINDS)[number];
 
 export interface BuiltMail {
@@ -49,6 +49,32 @@ export function brevoTemplate(kind: BrevoKind, lang: string): BuiltMail {
     html: shell({ lang, title, preheader: pre, badge, accent, desk, body: [h1(title), ...body] }),
   });
   switch (kind) {
+    case "auth": {
+      // Shared localized auth block (login, verify, reset, e-mail change, invite,
+      // re-auth, deletion): the sender supplies TITLE/BODY/CTA/LINK/CODE.
+      const t = c.login;
+      const link = PA("LINK", "https://rout.be/auth").replace("params.link |", "params.link | default: params.MAGIC_LINK | default: params.magic_link |");
+      return {
+        subject: `${P("TITLE", t.title)} // ROUT`,
+        html: shell({
+          lang,
+          title: t.title,
+          preheader: P("PREHEADER", t.pre),
+          badge: P("BADGE", t.badge),
+          accent: "auth",
+          desk: D.auth,
+          body: [
+            h1(P("TITLE", t.title)),
+            "{% if params.NAME or params.name %}" + g + "{% endif %}",
+            p(P("BODY", t.intro)),
+            "{% if params.CODE or params.code %}" + codeBox(P("CODE_LABEL", t.codeLabel), "{{ params.CODE | default: params.code }}") + "{% endif %}",
+            "{% if params.LINK or params.link or params.MAGIC_LINK or params.magic_link %}" +
+              button(P("CTA", t.button), link) + urlBox(t.urlLabel, link) + "{% endif %}",
+            notice(P("FOOTER", t.notice)),
+          ],
+        }),
+      };
+    }
     case "login": {
       const t = c.login;
       const link = PA("MAGIC_LINK", "https://rout.be/auth").replace("params.magic_link", "params.url | default: params.link");
