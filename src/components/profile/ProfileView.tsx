@@ -143,7 +143,7 @@ export function ProfileView({
       b.kind === "booking_request" ||
       b.kind === "spacer" || isProfileSectionKind(b.kind),
   );
-  const liveProviders = blocks.filter((b) => b.kind === "live").map((b) => b.value);
+  const liveProviders = profile.blocks.filter((b) => b.kind === "live").map((b) => b.value);
   /** Accent-animatie op de gekozen hoofdlink (glow, pulse of shimmer). */
   const ctaClass = (blockId: string) => {
     if (prefs.ctaBlockId !== blockId || prefs.ctaEffect === "none") return "";

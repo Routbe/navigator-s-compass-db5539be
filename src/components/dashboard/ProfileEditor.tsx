@@ -1,5 +1,6 @@
 import { YouTubeStudioCard } from "@/components/studio/YouTubeStudioCard";
 import { isProfileSectionKind, PROFILE_SECTION_LABELS } from "@/lib/profile-section-blocks";
+import { integrationById } from "@/lib/integrations-catalog";
 import { GuestbookAccordion } from "@/components/studio/GuestbookAccordion";
 import { QuestionsInboxAccordion } from "@/components/studio/QuestionsInboxAccordion";
 import { QrCode } from "lucide-react";
@@ -662,9 +663,15 @@ export function ProfileEditor({ variant = "verified" }: { variant?: ProfileVaria
   };
 
   const addBlock = (kind: string, value = "") => {
-    const label = isProfileSectionKind(kind) ? PROFILE_SECTION_LABELS[kind] : BLOCK_KINDS.find((k) => k.kind === kind)?.label;
+    const label = isProfileSectionKind(kind)
+      ? PROFILE_SECTION_LABELS[kind]
+      : kind === "live"
+        ? integrationById(value)?.label
+        : BLOCK_KINDS.find((k) => k.kind === kind)?.label;
     if (!label) return;
-    const existing = isProfileSectionKind(kind) ? blocks.find((b) => b.kind === kind) : undefined;
+    const existing = isProfileSectionKind(kind)
+      ? blocks.find((b) => b.kind === kind)
+      : kind === "live" ? blocks.find((b) => b.kind === "live" && b.value === value) : undefined;
     if (existing) {
       setBlocks((list) => list.map((b) => b.id === existing.id ? { ...b, hidden: false } : b));
       setOpenBlock(existing.id);
@@ -969,8 +976,6 @@ export function ProfileEditor({ variant = "verified" }: { variant?: ProfileVaria
                   } else if (id === "badges") {
                     setPref("badgeShowcaseVisible", true);
                     toast.success("ROUT Badges staan aan op je profiel");
-                  } else if (id === "youtube") {
-                    document.getElementById("studio-youtube")?.scrollIntoView({ behavior: "smooth", block: "center" });
                   } else if (id === "reach") {
                     document.getElementById("studio-total-reach")?.scrollIntoView({ behavior: "smooth", block: "center" });
                   } else {
