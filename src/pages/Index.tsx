@@ -8,6 +8,7 @@ import { QRPreview } from "@/components/QRPreview";
 import { QRTypeSelector, QRType } from "@/components/QRTypeSelector";
 import { QRTypeSheet } from "@/components/QRTypeSheet";
 import { useI18n } from "@/lib/i18n";
+import { publishQrDesign } from "@/lib/qr-design-bridge";
 
 import { QRStyleTabs, FrameStyle } from "@/components/QRStyleTabs";
 import { ProfileShowcase } from "@/components/home/ProfileShowcase";
@@ -84,6 +85,9 @@ const Index = () => {
   const [outerCornerStyle, setOuterCornerStyle] = useState<CornerSquareType>("square");
   const [innerCornerStyle, setInnerCornerStyle] = useState<CornerDotType>("square");
   const [logoSize, setLogoSize] = useState(0.4);
+  useEffect(() => {
+    publishQrDesign({ fgColor, bgColor, dotStyle });
+  }, [fgColor, bgColor, dotStyle]);
   const [logoMargin, setLogoMargin] = useState(10);
   const [hideBackgroundDots, setHideBackgroundDots] = useState(true);
 
