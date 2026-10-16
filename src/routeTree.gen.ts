@@ -57,6 +57,7 @@ import { Route as AuthenticatedMyDataRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AccountAccountViewRouteImport } from './routes/account.$accountView'
 import { Route as ApiClaimRootRouteImport } from './routes/api/claim-root'
+import { Route as ApiAdminMailCheckRouteImport } from './routes/api_.admin-mail-check'
 import { Route as ApiPaymentStatusRouteImport } from './routes/api_.payment-status'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as AuthAuthViewRouteImport } from './routes/auth.$authView'
@@ -404,6 +405,11 @@ const ApiClaimRootRoute = ApiClaimRootRouteImport.update({
   id: '/claim-root',
   path: '/claim-root',
   getParentRoute: () => ApiRoute,
+} as any)
+const ApiAdminMailCheckRoute = ApiAdminMailCheckRouteImport.update({
+  id: '/api_/admin-mail-check',
+  path: '/api/admin-mail-check',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPaymentStatusRoute = ApiPaymentStatusRouteImport.update({
   id: '/api_/payment-status',
@@ -1042,6 +1048,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/api/claim-root': typeof ApiClaimRootRoute
+  '/api/admin-mail-check': typeof ApiAdminMailCheckRoute
   '/api/payment-status': typeof ApiPaymentStatusRoute
   '/auth/$authView': typeof AuthAuthViewRoute
   '/auth/bluesky': typeof AuthBlueskyRoute
@@ -1195,6 +1202,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/api/claim-root': typeof ApiClaimRootRoute
+  '/api/admin-mail-check': typeof ApiAdminMailCheckRoute
   '/api/payment-status': typeof ApiPaymentStatusRoute
   '/auth/$authView': typeof AuthAuthViewRoute
   '/auth/bluesky': typeof AuthBlueskyRoute
@@ -1351,6 +1359,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/api/claim-root': typeof ApiClaimRootRoute
+  '/api_/admin-mail-check': typeof ApiAdminMailCheckRoute
   '/api_/payment-status': typeof ApiPaymentStatusRoute
   '/auth/$authView': typeof AuthAuthViewRoute
   '/auth/bluesky': typeof AuthBlueskyRoute
@@ -1509,6 +1518,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/account/$accountView'
     | '/api/claim-root'
+    | '/api/admin-mail-check'
     | '/api/payment-status'
     | '/auth/$authView'
     | '/auth/bluesky'
@@ -1662,6 +1672,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/account/$accountView'
     | '/api/claim-root'
+    | '/api/admin-mail-check'
     | '/api/payment-status'
     | '/auth/$authView'
     | '/auth/bluesky'
@@ -1817,6 +1828,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/account/$accountView'
     | '/api/claim-root'
+    | '/api_/admin-mail-check'
     | '/api_/payment-status'
     | '/auth/$authView'
     | '/auth/bluesky'
@@ -1965,6 +1977,7 @@ export interface RootRouteChildren {
   DotwellKnownJwksDotjsonRoute: typeof DotwellKnownJwksDotjsonRoute
   DotwellKnownOpenidConfigurationRoute: typeof DotwellKnownOpenidConfigurationRoute
   AccountAccountViewRoute: typeof AccountAccountViewRoute
+  ApiAdminMailCheckRoute: typeof ApiAdminMailCheckRoute
   ApiPaymentStatusRoute: typeof ApiPaymentStatusRoute
   AuthContinueRoute: typeof AuthContinueRoute
   BrandSplatRoute: typeof BrandSplatRoute
@@ -2365,6 +2378,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/claim-root'
       preLoaderRoute: typeof ApiClaimRootRouteImport
       parentRoute: typeof ApiRoute
+    }
+    '/api_/admin-mail-check': {
+      id: '/api_/admin-mail-check'
+      path: '/api/admin-mail-check'
+      fullPath: '/api/admin-mail-check'
+      preLoaderRoute: typeof ApiAdminMailCheckRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api_/payment-status': {
       id: '/api_/payment-status'
@@ -3383,6 +3403,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotwellKnownJwksDotjsonRoute: DotwellKnownJwksDotjsonRoute,
   DotwellKnownOpenidConfigurationRoute: DotwellKnownOpenidConfigurationRoute,
   AccountAccountViewRoute: AccountAccountViewRoute,
+  ApiAdminMailCheckRoute: ApiAdminMailCheckRoute,
   ApiPaymentStatusRoute: ApiPaymentStatusRoute,
   AuthContinueRoute: AuthContinueRoute,
   BrandSplatRoute: BrandSplatRoute,
