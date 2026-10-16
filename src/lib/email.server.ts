@@ -164,6 +164,13 @@ async function dispatch(input: SendLocalizedEmailInput): Promise<boolean> {
  */
 export async function sendLocalizedEmail(input: SendLocalizedEmailInput): Promise<void> {
   const task = dispatch(input);
+  // Admin portal: wait for the result so a refused mail reaches the sign-in screen.
+  const { isAdminMode } = await import("@/lib/app-mode");
+  if (isAdminMode()) {
+    const sent = await task;
+    if (!sent) throw new Error("Inlogmail kon niet verzonden worden (zie [Brevo API Error] in de logs).");
+    return;
+  }
   const waitUntil = vercelWaitUntil();
   if (waitUntil) {
     try {

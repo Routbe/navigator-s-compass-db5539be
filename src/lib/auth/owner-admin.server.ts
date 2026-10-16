@@ -27,11 +27,13 @@ export function isOwnerEmail(email: string | null | undefined): boolean {
   return ownerEmails().includes(email.trim().toLowerCase());
 }
 
-/** Eligibility only; never grants privileges. */
-export async function canUseAdminEmail(email: unknown): Promise<boolean> {
-  if (typeof email !== "string" || !email.trim()) return false;
+export type AdminEmailEligibility = { ok: true } | { ok: false; reason: "missing_email" | "not_admin" | "db_unreachable" };
+
+/** Eligibility with a reason; never grants privileges. */
+export async function adminEmailEligibility(email: unknown): Promise<AdminEmailEligibility> {
+  if (typeof email !== "string" || !email.trim()) return { ok: false, reason: "missing_email" };
   const normalized = email.trim().toLowerCase();
-  if (isOwnerEmail(normalized)) return true;
+  if (isOwnerEmail(normalized)) return { ok: true };
   try {
     const rows = (await sql`
       select 1 from public.user_roles r
@@ -39,11 +41,21 @@ export async function canUseAdminEmail(email: unknown): Promise<boolean> {
       where lower(u.email) = ${normalized} and r.role::text = 'admin'
       limit 1
     `) as unknown[];
-    return rows.length > 0;
+    return rows.length > 0 ? { ok: true } : { ok: false, reason: "not_admin" };
   } catch (err) {
     console.error("[admin-auth] canUseAdminEmail lookup error:", err);
-    return false;
+    return { ok: false, reason: "db_unreachable" };
   }
+}
+
+/** Eligibility only; never grants privileges. */
+export async function canUseAdminEmail(email: unknown): Promise<boolean> {
+  return (await adminEmailEligibility(email)).ok;
+}
+
+/** Configured owner addresses (for the diagnostic test mail only). */
+export function configuredOwnerEmails(): string[] {
+  return ownerEmails();
 }
 
 async function grantAdmin(userId: string): Promise<void> {
