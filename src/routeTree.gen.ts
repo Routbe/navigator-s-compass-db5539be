@@ -19,6 +19,7 @@ import { Route as BatchRouteImport } from './routes/batch'
 import { Route as CardRouteImport } from './routes/card'
 import { Route as ClaimRouteImport } from './routes/claim'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DataDeletionRouteImport } from './routes/data-deletion'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as EmailTemplatesRouteImport } from './routes/email-templates'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -110,6 +111,7 @@ import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api_.public
 import { Route as ApiPublicWeatherRouteImport } from './routes/api_.public.weather'
 import { Route as ApiSnapchatStartRouteImport } from './routes/api_.snapchat.start'
 import { Route as ApiSpotifyStartRouteImport } from './routes/api_.spotify.start'
+import { Route as ApiYoutubeStartRouteImport } from './routes/api_.youtube.start'
 import { Route as AuthMastodonCallbackRouteImport } from './routes/auth_.mastodon.callback'
 import { Route as RUAliasRouteImport } from './routes/r.u.$alias'
 import { Route as UUsernameSlugRouteImport } from './routes/u.$username.$slug'
@@ -146,6 +148,8 @@ import { Route as ApiPublicSpotifyCallbackRouteImport } from './routes/api_.publ
 import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api_.public.telegram.webhook'
 import { Route as ApiPublicWeatherWebhookTokenRouteImport } from './routes/api_.public.weather-webhook.$token'
 import { Route as ApiPublicWebhooksBankingRouteImport } from './routes/api_.public.webhooks.banking'
+import { Route as ApiPublicYoutubeCallbackRouteImport } from './routes/api_.public.youtube.callback'
+import { Route as ApiPublicYoutubeCardRouteImport } from './routes/api_.public.youtube.card'
 import { Route as AuthenticatedConsoleAppsAppIdIndexRouteImport } from './routes/_authenticated/console.apps.$appId.index'
 import { Route as AuthenticatedConsoleAppsAppIdAdvancedRouteImport } from './routes/_authenticated/console.apps.$appId.advanced'
 import { Route as AuthenticatedConsoleAppsAppIdAiPromptsRouteImport } from './routes/_authenticated/console.apps.$appId.ai-prompts'
@@ -208,6 +212,11 @@ const ClaimRoute = ClaimRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataDeletionRoute = DataDeletionRouteImport.update({
+  id: '/data-deletion',
+  path: '/data-deletion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevelopersRoute = DevelopersRouteImport.update({
@@ -684,6 +693,11 @@ const ApiSpotifyStartRoute = ApiSpotifyStartRouteImport.update({
   path: '/api/spotify/start',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiYoutubeStartRoute = ApiYoutubeStartRouteImport.update({
+  id: '/api_/youtube/start',
+  path: '/api/youtube/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthMastodonCallbackRoute = AuthMastodonCallbackRouteImport.update({
   id: '/auth_/mastodon/callback',
   path: '/auth/mastodon/callback',
@@ -884,6 +898,17 @@ const ApiPublicWebhooksBankingRoute =
     path: '/api/public/webhooks/banking',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicYoutubeCallbackRoute =
+  ApiPublicYoutubeCallbackRouteImport.update({
+    id: '/api_/public/youtube/callback',
+    path: '/api/public/youtube/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicYoutubeCardRoute = ApiPublicYoutubeCardRouteImport.update({
+  id: '/api_/public/youtube/card',
+  path: '/api/public/youtube/card',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedConsoleAppsAppIdIndexRoute =
   AuthenticatedConsoleAppsAppIdIndexRouteImport.update({
     id: '/',
@@ -979,6 +1004,7 @@ export interface FileRoutesByFullPath {
   '/card': typeof CardRoute
   '/claim': typeof ClaimRoute
   '/contact': typeof ContactRoute
+  '/data-deletion': typeof DataDeletionRoute
   '/developers': typeof DevelopersRoute
   '/email-templates': typeof EmailTemplatesRoute
   '/explore': typeof ExploreRoute
@@ -1068,6 +1094,7 @@ export interface FileRoutesByFullPath {
   '/api/public/weather': typeof ApiPublicWeatherRoute
   '/api/snapchat/start': typeof ApiSnapchatStartRoute
   '/api/spotify/start': typeof ApiSpotifyStartRoute
+  '/api/youtube/start': typeof ApiYoutubeStartRoute
   '/auth/mastodon/callback': typeof AuthMastodonCallbackRoute
   '/r/u/$alias': typeof RUAliasRoute
   '/u/$username/$slug': typeof UUsernameSlugRoute
@@ -1105,6 +1132,8 @@ export interface FileRoutesByFullPath {
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/api/public/weather-webhook/$token': typeof ApiPublicWeatherWebhookTokenRoute
   '/api/public/webhooks/banking': typeof ApiPublicWebhooksBankingRoute
+  '/api/public/youtube/callback': typeof ApiPublicYoutubeCallbackRoute
+  '/api/public/youtube/card': typeof ApiPublicYoutubeCardRoute
   '/console/apps/': typeof AuthenticatedConsoleAppsIndexRoute
   '/console/apps/$appId/advanced': typeof AuthenticatedConsoleAppsAppIdAdvancedRoute
   '/console/apps/$appId/ai-prompts': typeof AuthenticatedConsoleAppsAppIdAiPromptsRoute
@@ -1130,6 +1159,7 @@ export interface FileRoutesByTo {
   '/card': typeof CardRoute
   '/claim': typeof ClaimRoute
   '/contact': typeof ContactRoute
+  '/data-deletion': typeof DataDeletionRoute
   '/developers': typeof DevelopersRoute
   '/email-templates': typeof EmailTemplatesRoute
   '/explore': typeof ExploreRoute
@@ -1216,6 +1246,7 @@ export interface FileRoutesByTo {
   '/api/public/weather': typeof ApiPublicWeatherRoute
   '/api/snapchat/start': typeof ApiSnapchatStartRoute
   '/api/spotify/start': typeof ApiSpotifyStartRoute
+  '/api/youtube/start': typeof ApiYoutubeStartRoute
   '/auth/mastodon/callback': typeof AuthMastodonCallbackRoute
   '/r/u/$alias': typeof RUAliasRoute
   '/u/$username/$slug': typeof UUsernameSlugRoute
@@ -1252,6 +1283,8 @@ export interface FileRoutesByTo {
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/api/public/weather-webhook/$token': typeof ApiPublicWeatherWebhookTokenRoute
   '/api/public/webhooks/banking': typeof ApiPublicWebhooksBankingRoute
+  '/api/public/youtube/callback': typeof ApiPublicYoutubeCallbackRoute
+  '/api/public/youtube/card': typeof ApiPublicYoutubeCardRoute
   '/console/apps': typeof AuthenticatedConsoleAppsIndexRoute
   '/console/apps/$appId/advanced': typeof AuthenticatedConsoleAppsAppIdAdvancedRoute
   '/console/apps/$appId/ai-prompts': typeof AuthenticatedConsoleAppsAppIdAiPromptsRoute
@@ -1280,6 +1313,7 @@ export interface FileRoutesById {
   '/card': typeof CardRoute
   '/claim': typeof ClaimRoute
   '/contact': typeof ContactRoute
+  '/data-deletion': typeof DataDeletionRoute
   '/developers': typeof DevelopersRoute
   '/email-templates': typeof EmailTemplatesRoute
   '/explore': typeof ExploreRoute
@@ -1369,6 +1403,7 @@ export interface FileRoutesById {
   '/api_/public/weather': typeof ApiPublicWeatherRoute
   '/api_/snapchat/start': typeof ApiSnapchatStartRoute
   '/api_/spotify/start': typeof ApiSpotifyStartRoute
+  '/api_/youtube/start': typeof ApiYoutubeStartRoute
   '/auth_/mastodon/callback': typeof AuthMastodonCallbackRoute
   '/r/u/$alias': typeof RUAliasRoute
   '/u/$username/$slug': typeof UUsernameSlugRoute
@@ -1406,6 +1441,8 @@ export interface FileRoutesById {
   '/api_/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/api_/public/weather-webhook/$token': typeof ApiPublicWeatherWebhookTokenRoute
   '/api_/public/webhooks/banking': typeof ApiPublicWebhooksBankingRoute
+  '/api_/public/youtube/callback': typeof ApiPublicYoutubeCallbackRoute
+  '/api_/public/youtube/card': typeof ApiPublicYoutubeCardRoute
   '/_authenticated/console/apps/': typeof AuthenticatedConsoleAppsIndexRoute
   '/_authenticated/console/apps/$appId/advanced': typeof AuthenticatedConsoleAppsAppIdAdvancedRoute
   '/_authenticated/console/apps/$appId/ai-prompts': typeof AuthenticatedConsoleAppsAppIdAiPromptsRoute
@@ -1434,6 +1471,7 @@ export interface FileRouteTypes {
     | '/card'
     | '/claim'
     | '/contact'
+    | '/data-deletion'
     | '/developers'
     | '/email-templates'
     | '/explore'
@@ -1523,6 +1561,7 @@ export interface FileRouteTypes {
     | '/api/public/weather'
     | '/api/snapchat/start'
     | '/api/spotify/start'
+    | '/api/youtube/start'
     | '/auth/mastodon/callback'
     | '/r/u/$alias'
     | '/u/$username/$slug'
@@ -1560,6 +1599,8 @@ export interface FileRouteTypes {
     | '/api/public/telegram/webhook'
     | '/api/public/weather-webhook/$token'
     | '/api/public/webhooks/banking'
+    | '/api/public/youtube/callback'
+    | '/api/public/youtube/card'
     | '/console/apps/'
     | '/console/apps/$appId/advanced'
     | '/console/apps/$appId/ai-prompts'
@@ -1585,6 +1626,7 @@ export interface FileRouteTypes {
     | '/card'
     | '/claim'
     | '/contact'
+    | '/data-deletion'
     | '/developers'
     | '/email-templates'
     | '/explore'
@@ -1671,6 +1713,7 @@ export interface FileRouteTypes {
     | '/api/public/weather'
     | '/api/snapchat/start'
     | '/api/spotify/start'
+    | '/api/youtube/start'
     | '/auth/mastodon/callback'
     | '/r/u/$alias'
     | '/u/$username/$slug'
@@ -1707,6 +1750,8 @@ export interface FileRouteTypes {
     | '/api/public/telegram/webhook'
     | '/api/public/weather-webhook/$token'
     | '/api/public/webhooks/banking'
+    | '/api/public/youtube/callback'
+    | '/api/public/youtube/card'
     | '/console/apps'
     | '/console/apps/$appId/advanced'
     | '/console/apps/$appId/ai-prompts'
@@ -1734,6 +1779,7 @@ export interface FileRouteTypes {
     | '/card'
     | '/claim'
     | '/contact'
+    | '/data-deletion'
     | '/developers'
     | '/email-templates'
     | '/explore'
@@ -1823,6 +1869,7 @@ export interface FileRouteTypes {
     | '/api_/public/weather'
     | '/api_/snapchat/start'
     | '/api_/spotify/start'
+    | '/api_/youtube/start'
     | '/auth_/mastodon/callback'
     | '/r/u/$alias'
     | '/u/$username/$slug'
@@ -1860,6 +1907,8 @@ export interface FileRouteTypes {
     | '/api_/public/telegram/webhook'
     | '/api_/public/weather-webhook/$token'
     | '/api_/public/webhooks/banking'
+    | '/api_/public/youtube/callback'
+    | '/api_/public/youtube/card'
     | '/_authenticated/console/apps/'
     | '/_authenticated/console/apps/$appId/advanced'
     | '/_authenticated/console/apps/$appId/ai-prompts'
@@ -1888,6 +1937,7 @@ export interface RootRouteChildren {
   CardRoute: typeof CardRoute
   ClaimRoute: typeof ClaimRoute
   ContactRoute: typeof ContactRoute
+  DataDeletionRoute: typeof DataDeletionRoute
   DevelopersRoute: typeof DevelopersRoute
   EmailTemplatesRoute: typeof EmailTemplatesRoute
   ExploreRoute: typeof ExploreRoute
@@ -1942,6 +1992,7 @@ export interface RootRouteChildren {
   ApiPublicWeatherRoute: typeof ApiPublicWeatherRoute
   ApiSnapchatStartRoute: typeof ApiSnapchatStartRoute
   ApiSpotifyStartRoute: typeof ApiSpotifyStartRoute
+  ApiYoutubeStartRoute: typeof ApiYoutubeStartRoute
   AuthMastodonCallbackRoute: typeof AuthMastodonCallbackRoute
   RUAliasRoute: typeof RUAliasRoute
   ApiPublicAuthProvidersRoute: typeof ApiPublicAuthProvidersRoute
@@ -1972,6 +2023,8 @@ export interface RootRouteChildren {
   ApiPublicTelegramWebhookRoute: typeof ApiPublicTelegramWebhookRoute
   ApiPublicWeatherWebhookTokenRoute: typeof ApiPublicWeatherWebhookTokenRoute
   ApiPublicWebhooksBankingRoute: typeof ApiPublicWebhooksBankingRoute
+  ApiPublicYoutubeCallbackRoute: typeof ApiPublicYoutubeCallbackRoute
+  ApiPublicYoutubeCardRoute: typeof ApiPublicYoutubeCardRoute
   ApiPublicBookingsIdActionRoute: typeof ApiPublicBookingsIdActionRoute
 }
 
@@ -2045,6 +2098,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data-deletion': {
+      id: '/data-deletion'
+      path: '/data-deletion'
+      fullPath: '/data-deletion'
+      preLoaderRoute: typeof DataDeletionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/developers': {
@@ -2684,6 +2744,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSpotifyStartRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api_/youtube/start': {
+      id: '/api_/youtube/start'
+      path: '/api/youtube/start'
+      fullPath: '/api/youtube/start'
+      preLoaderRoute: typeof ApiYoutubeStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth_/mastodon/callback': {
       id: '/auth_/mastodon/callback'
       path: '/auth/mastodon/callback'
@@ -2934,6 +3001,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/webhooks/banking'
       fullPath: '/api/public/webhooks/banking'
       preLoaderRoute: typeof ApiPublicWebhooksBankingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api_/public/youtube/callback': {
+      id: '/api_/public/youtube/callback'
+      path: '/api/public/youtube/callback'
+      fullPath: '/api/public/youtube/callback'
+      preLoaderRoute: typeof ApiPublicYoutubeCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api_/public/youtube/card': {
+      id: '/api_/public/youtube/card'
+      path: '/api/public/youtube/card'
+      fullPath: '/api/public/youtube/card'
+      preLoaderRoute: typeof ApiPublicYoutubeCardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/console/apps/$appId/': {
@@ -3274,6 +3355,7 @@ const rootRouteChildren: RootRouteChildren = {
   CardRoute: CardRoute,
   ClaimRoute: ClaimRoute,
   ContactRoute: ContactRoute,
+  DataDeletionRoute: DataDeletionRoute,
   DevelopersRoute: DevelopersRoute,
   EmailTemplatesRoute: EmailTemplatesRoute,
   ExploreRoute: ExploreRoute,
@@ -3328,6 +3410,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicWeatherRoute: ApiPublicWeatherRoute,
   ApiSnapchatStartRoute: ApiSnapchatStartRoute,
   ApiSpotifyStartRoute: ApiSpotifyStartRoute,
+  ApiYoutubeStartRoute: ApiYoutubeStartRoute,
   AuthMastodonCallbackRoute: AuthMastodonCallbackRoute,
   RUAliasRoute: RUAliasRoute,
   ApiPublicAuthProvidersRoute: ApiPublicAuthProvidersRoute,
@@ -3359,6 +3442,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicTelegramWebhookRoute: ApiPublicTelegramWebhookRoute,
   ApiPublicWeatherWebhookTokenRoute: ApiPublicWeatherWebhookTokenRoute,
   ApiPublicWebhooksBankingRoute: ApiPublicWebhooksBankingRoute,
+  ApiPublicYoutubeCallbackRoute: ApiPublicYoutubeCallbackRoute,
+  ApiPublicYoutubeCardRoute: ApiPublicYoutubeCardRoute,
   ApiPublicBookingsIdActionRoute: ApiPublicBookingsIdActionRoute,
 }
 export const routeTree = rootRouteImport

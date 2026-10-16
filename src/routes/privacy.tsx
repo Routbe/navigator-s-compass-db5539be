@@ -11,6 +11,7 @@ import { LegalPage } from "@/components/LegalPage";
 import { LegalChips, type LegalChip } from "@/components/LegalChips";
 import { ShieldCheck } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { GOOGLE_LIMITED_USE } from "@/lib/legal-constants";
 
 const badgeClass =
   "inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/60 px-2.5 py-1 font-mono text-[11px] text-muted-foreground";
@@ -62,6 +63,7 @@ function PrivacyPage() {
     { id: "static", label: t("privacy.chip.static") },
     { id: "dynamic", label: t("privacy.chip.dynamic") },
     { id: "accounts", label: t("privacy.chip.accounts") },
+    { id: "oauth", label: t("privacy.chip.oauth") },
     { id: "domains", label: t("privacy.chip.domains") },
     { id: "api", label: t("privacy.chip.api") },
     { id: "payments", label: t("privacy.chip.payments") },
@@ -209,20 +211,53 @@ function PrivacyPage() {
           ),
         },
         {
+          id: "oauth",
+          heading: numbered("05", t("privacy.section.oauth.heading")),
+          wrapperClassName:
+            "my-6 scroll-mt-24 rounded-2xl border border-primary/25 bg-primary/5 p-4 sm:p-6",
+          body: (
+            <>
+              <p className={bodyText}>{t("privacy.section.oauth.intro")}</p>
+              <ul className={listClass}>
+                <li>
+                  <span className={strong}>{t("privacy.section.oauth.tokens.strong")}</span>{" "}
+                  {t("privacy.section.oauth.tokens.text")}
+                </li>
+                <li>
+                  <span className={strong}>{t("privacy.section.oauth.google.strong")}</span>{" "}
+                  {t("privacy.section.oauth.google.text")}
+                </li>
+                <li>
+                  <span className={strong}>{t("privacy.section.oauth.snap.strong")}</span>{" "}
+                  {t("privacy.section.oauth.snap.text")}
+                </li>
+                <li>
+                  <span className={strong}>{t("privacy.section.oauth.meta.strong")}</span>{" "}
+                  {t("privacy.section.oauth.meta.text")}
+                </li>
+                <li>{t("privacy.section.oauth.revoke")}</li>
+              </ul>
+              <p className={bodyText} lang="en">
+                <em>{GOOGLE_LIMITED_USE}</em>
+              </p>
+            </>
+          ),
+        },
+        {
           id: "domains",
-          heading: numbered("05", t("privacy.section.domains.heading")),
+          heading: numbered("06", t("privacy.section.domains.heading")),
           wrapperClassName: sectionWrapper,
           body: <p className={bodyText}>{t("privacy.section.domains.body")}</p>,
         },
         {
           id: "api",
-          heading: numbered("06", t("privacy.section.api.heading")),
+          heading: numbered("07", t("privacy.section.api.heading")),
           wrapperClassName: sectionWrapper,
           body: <p className={bodyText}>{t("privacy.section.api.body")}</p>,
         },
         {
           id: "payments",
-          heading: numbered("07", t("privacy.section.payments.heading")),
+          heading: numbered("08", t("privacy.section.payments.heading")),
           wrapperClassName: sectionWrapper,
           body: (
             <>
@@ -236,7 +271,7 @@ function PrivacyPage() {
         },
         {
           id: "hosting",
-          heading: numbered("08", t("privacy.section.hosting.heading")),
+          heading: numbered("09", t("privacy.section.hosting.heading")),
           wrapperClassName: sectionWrapper,
           body: (
             <>
@@ -254,7 +289,7 @@ function PrivacyPage() {
         },
         {
           id: "rights",
-          heading: numbered("09", t("privacy.section.rights.heading")),
+          heading: numbered("10", t("privacy.section.rights.heading")),
           wrapperClassName: "scroll-mt-24",
           body: (
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -276,6 +311,7 @@ function PrivacyPage() {
           links={[
             { to: "/contact", label: t("privacy.footer.contact") },
             { to: "/terms", label: t("privacy.footer.terms") },
+            { to: "/data-deletion", label: t("legal.footer.dataDeletion") },
             { to: "/sovereignty", label: t("privacy.footer.sovereignty") },
           ]}
         />

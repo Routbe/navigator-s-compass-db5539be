@@ -1,3 +1,4 @@
+import { YouTubeStudioCard } from "@/components/studio/YouTubeStudioCard";
 import { isProfileSectionKind, PROFILE_SECTION_LABELS } from "@/lib/profile-section-blocks";
 import { GuestbookAccordion } from "@/components/studio/GuestbookAccordion";
 import { QuestionsInboxAccordion } from "@/components/studio/QuestionsInboxAccordion";
@@ -967,6 +968,8 @@ export function ProfileEditor({ variant = "verified" }: { variant?: ProfileVaria
                   } else if (id === "badges") {
                     setPref("badgeShowcaseVisible", true);
                     toast.success("ROUT Badges staan aan op je profiel");
+                  } else if (id === "youtube") {
+                    document.getElementById("studio-youtube")?.scrollIntoView({ behavior: "smooth", block: "center" });
                   } else if (id === "reach") {
                     document.getElementById("studio-total-reach")?.scrollIntoView({ behavior: "smooth", block: "center" });
                   } else {
@@ -974,6 +977,8 @@ export function ProfileEditor({ variant = "verified" }: { variant?: ProfileVaria
                   }
                 }}
               >
+
+                  <YouTubeStudioCard />
 
                   <section id="studio-total-reach" className="space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5">
                     <h2 className="text-lg font-medium">Totaal bereik</h2>

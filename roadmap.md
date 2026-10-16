@@ -6,3 +6,6 @@
 - [ ] QR, privacy & delen: automatische per-user preview-afbeelding (/api/public/og/<handle>.png) en preview-tekst tonen in ShareInspector; gebruiker kan overschrijven
 
 - [ ] Vertalingen: ~2000 vaste teksten in componenten/pagina's omzetten (scan: bun scripts/i18n-hardcoded.ts)
+- [x] Legal: privacy OAuth/API section, terms third-party/UGC/indemnity, /data-deletion page, footer links
+- [x] YouTube Kaart (vault koppeling, profielkaart, ontkoppelen)
+- [ ] db/95_youtube_vault.sql toepassen op Neon (wacht op NEON_API_KEY / Vercel deploy) + Google Cloud: redirect URI, YouTube Data API v3, youtube.readonly scope

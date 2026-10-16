@@ -45,6 +45,7 @@ const SUPPORT = [
   { to: "/explore", label: "Explore profiles" },
   { to: "/press", label: "Press & brand kit" },
   { to: "/terms", label: "Terms" },
+  { to: "/data-deletion", label: "Data deletion" },
 ];
 
 const AUTH_ROUTES = new Set(["/auth", "/login"]);
@@ -75,6 +76,10 @@ export function Footer() {
           <span aria-hidden>•</span>
           <Link to="/terms" className="hover:text-foreground">
             Terms
+          </Link>
+          <span aria-hidden>•</span>
+          <Link to="/data-deletion" className="hover:text-foreground">
+            Data deletion
           </Link>
         </div>
       </footer>
